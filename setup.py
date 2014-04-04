@@ -16,7 +16,7 @@ setup(name='gant',
         "License :: OSI Approved :: BSD License",
         "Environment :: Console",
     ],
-    packages=('gant'),
+    packages=['gant'],
     install_requires=[
         "docker-py",
         "aaargh",
