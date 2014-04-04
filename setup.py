@@ -4,9 +4,9 @@ import sys, os
 
 setup(name='gant',
     version='0.0.1',
-    description="Development and testing environment for GlusterFS using Docker.",
-    long_description="Development and testing environment for GlusterFS using Docker.",
-    classifiers=[], 
+    description="The Gluster development helper ant",
+    long_description="The Gluster development helper ant, gant for short, helps developer of GlusterFS by createing a standardized development and testing environment using Docker.",
+    classifiers=[],
     keywords='',
     author='Kaushal M',
     author_email='kshlmster@gmail.com',
