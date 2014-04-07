@@ -19,7 +19,7 @@ setup(name='gant',
     packages=['gant'],
     install_requires=[
         "docker-py",
-        "aaargh",
+        "docopt",
         ],
     entry_points="""
         [console_scripts]
