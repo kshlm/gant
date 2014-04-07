@@ -1,5 +1,6 @@
 import os
 import grp
+import time
 from docker_helper import DockerHelper
 
 def check_permissions():
@@ -28,15 +29,18 @@ class GantDocker (DockerHelper):
         check_permissions()
 
         basetag = args["--basetag"]
-        bsaedir = args["--basedir"]
+        basedir = args["--basedir"]
+        force   = args["force"]
+
         if self.image_exists(tag = basetag):
-            if not args["force"]:
+            if not force:
                 print "Image with tag '%s' already exists"%(basetag)
                 return  self.image_by_tag (basetag)
             else:
                 self.remove_image (basetag)
-
-        self.build(path = basedir, rm = True, tag = basedir)
+        print "Building base image"
+        image = self.build(path = basedir, rm = True, tag = basetag)
+        print "Built base image {0} (Id: {1})".format()
 
     def build_main_image (self, args):
         """
@@ -44,7 +48,41 @@ class GantDocker (DockerHelper):
         """
         check_permissions()
 
-        print "Would build the main image"
+        basetag = args["--basetag"]
+        basedir = args["--basedir"]
+        maintag = args["--maintag"]
+        srcdir  = args["<srcdir>"]
+        force   = args["force"]
+
+        if not self.image_exists(tag = basetag):
+            if not force:
+                exit ("Base image with tag {0} does not exist".format(basetag))
+            else:
+                print "FORCE given. Forcefully building the base image."
+                self.build_base_image(args)
+
+        if self.image_exists(tag = maintag):
+            self.remove_image(tag = maintag)
+
+        build_command = "/build/make-install-gluster.sh"
+        container = self.create_container(image = basetag, command = build_command, volumes = ["/build", "/src"])
+
+        self.start (container, binds = {basedir : "/build", srcdir : "/src"})
+        print 'Building main image'
+        while self.inspect_container(container)["State"]["Running"]:
+            time.sleep(5)
+
+        if not self.inspect_container(container)["State"]["ExitCode"] == 0:
+            print "Build failed"
+            print "Dumping logs"
+            print self.logs(container)
+            exit()
+
+        # The docker remote api expects the repository and tag to be seperate items for commit
+        repo = maintag.split(':')[0]
+        tag = maintag.split(':')[1]
+        image = self.commit(container['Id'], repository = repo, tag = tag)
+        print "Built main image {0} (Id: {1})".format(maintag, image['Id'])
 
     def launch (self, args):
         """
