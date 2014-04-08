@@ -43,3 +43,21 @@ class DockerHelper (docker.Client):
             exists = True
 
         return exists
+
+    def container_ip (self, container):
+        """
+        Returns the internal ip of the container if available
+        """
+        info = self.inspect_container(container)
+        if not info:
+            return None
+
+        netInfo = info['NetworkSettings']
+        if not netInfo:
+            return None
+
+        ip = netInfo['IPAddress']
+        if not ip:
+            return None
+
+        return ip
