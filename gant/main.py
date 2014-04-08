@@ -11,7 +11,7 @@ Creates GlusterFS development and testing environments using Docker
 Usage:
     gant [options] build-base [force]
     gant [options] build-main <srcdir>[force]
-    gant [options] launch <number>
+    gant [options] launch <number> [force]
     gant [options] stop [<name>] [force]
     gant [options] info
     gant [options] ssh <name>
