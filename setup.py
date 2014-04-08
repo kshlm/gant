@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(name='gant',
-    version='0.0.2',
+    version='0.0.3',
     description="The Gluster development helper ant",
     long_description="The Gluster development helper ant, gant for short, helps in the development of GlusterFS by creating a standardized development and testing environment using Docker.",
     keywords='gluster docker utility development testing',
@@ -19,7 +19,7 @@ setup(name='gant',
         "Operating System :: POSIX :: Linux",
         "Topic :: Utilities",
     ],
-    packages=['gant'],
+    packages=['gant', 'gant.utils'],
     install_requires=[
         "docker-py",
         "docopt",
