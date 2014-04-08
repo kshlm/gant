@@ -132,6 +132,7 @@ class GantDocker (DockerHelper):
             print "Would stop container %s"%(args["name"])
         else:
             print "Would stop all containers"
+        print "For now use 'docker stop' to stop the containers"
 
     def info_cmd (self, args):
         """
@@ -140,4 +141,16 @@ class GantDocker (DockerHelper):
         print 'Would print info on the gluster env'
 
     def ssh_cmd (self, args):
-        print 'Would ssh into container %s'%(args['name'])
+        name = args["<name>"]
+
+        if not self.container_exists(name = name):
+            exit ("Unknown container {0}".format(name))
+
+        if not self.container_running(name = name):
+            exit ("Container {0} is not running".format(name))
+
+        ip = self.get_container_ip(name)
+        if not ip:
+            exit ("Failed to get network address for container {0}".formant(name))
+
+        ssh.launch_shell('root', ip, 'password')

@@ -1,7 +1,7 @@
 import os
 import tempfile
 
-sshCmdLine = 'sshpass -p {0} ssh -o UserKnownHostsFile={1} -o StrictHostKeyCheck=no {2}@{3} -o {4}'
+sshCmdLine = 'sshpass -p {0} ssh -o UserKnownHostsFile={1} -o StrictHostKeyChecking=no {2}@{3} -p {4}'
 
 def launch_shell (username, hostname, password, port = 22):
     """
@@ -9,9 +9,10 @@ def launch_shell (username, hostname, password, port = 22):
     """
     if not username or not hostname or not password:
         return False
-    tmpFile = tempfile.mktemp()
-    os.system(sshCmdLine.format(password, tmpFile, username, hostname, port))
-    os.remove(tmpFile)
+
+    with tempfile.NamedTemporaryFile() as tmpFile:
+        os.system(sshCmdLine.format(password, tmpFile.name, username, hostname, port))
+
 
     return True
 
@@ -21,6 +22,9 @@ def do_cmd (username, hostname, password, command, port = 22):
     """
     if not username or not hostname or not password or not command:
         return False
-    tmpFile = tempfile.mktemp()
-    os.system("{0} {1}".format(sshCmdLine.format(password, tmpFile, username, hostname, port), command))
-    os.remove(tmpFile)
+
+    with tempfile.NamedTemporaryFile() as tmpFile:
+        os.system("{0} {1}".format(sshCmdLine.format(password, tmpFile.name, username, hostname, port), command))
+
+
+    return True
