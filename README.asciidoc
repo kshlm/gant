@@ -20,6 +20,7 @@ NOTE: The helper scripts and files are not yet available in the GlusterFS source
 
 === Install +gant+
 Install +gant+ using +pip+,
+ 
  $ pip install gant
 
 == Using +gant+
