@@ -1,8 +1,8 @@
 import os
 import grp
 import time
-import tempfile
 from docker_helper import DockerHelper
+import ssh
 
 def check_permissions():
     """
@@ -97,9 +97,8 @@ class GantDocker (DockerHelper):
         force = args["force"]
 
         commandStr = "supervisord -c /etc/supervisor/conf.d/supervisord.conf"
-        createDevFuse = "sshpass -p password ssh -o UserKnownHostsFile={0} -o StrictHostKeyChecking=no root@{1} mknod /dev/fuse c 10 229"
+        createDevFuse = "mknod /dev/fuse c 10 229"
 
-        tmpFile = tempfile.mktemp()
         for i in range(1, n+1):
             cName = "{0}-{1}".format(prefix, i)
 
@@ -110,10 +109,13 @@ class GantDocker (DockerHelper):
                     if self.container_running(name = cName):
                         self.stop (cName)
                     self.remove_container(cName, v = True)
+
             c = self.create_container(image = maintag, name = cName, command = commandStr, volumes = ["/bricks"])
             self.start (c['Id'], privileged = True)
             time.sleep(2) # Wait for container to startup
-            os.system(createDevFuse.format(tmpFile, self.get_container_ip(c['Id'])))
+
+            ssh.do_cmd('root', self.get_container_ip(c['Id']), 'password', createDevFuse)
+
             print "Launched {0} (Id: {1})".format(cName, c['Id'])
             c = None
             cName = None
