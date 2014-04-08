@@ -97,7 +97,7 @@ class GantDocker (DockerHelper):
         force = args["force"]
 
         commandStr = "supervisord -c /etc/supervisor/conf.d/supervisord.conf"
-        createDevFuse = "sshpass -p password ssh -o UserKnownHostsFile={0} -o StrictHostKeyChecking=no ssh root@{1} mknod /dev/fuse c 10 229"
+        createDevFuse = "sshpass -p password ssh -o UserKnownHostsFile={0} -o StrictHostKeyChecking=no root@{1} mknod /dev/fuse c 10 229"
 
         tmpFile = tempfile.mktemp()
         for i in range(1, n+1):
@@ -112,7 +112,7 @@ class GantDocker (DockerHelper):
                     self.remove_container(cName, v = True)
             c = self.create_container(image = maintag, name = cName, command = commandStr, volumes = ["/bricks"])
             self.start (c['Id'], privileged = True)
-
+            time.sleep(2) # Wait for container to startup
             os.system(createDevFuse.format(tmpFile, self.get_container_ip(c['Id'])))
             print "Launched {0} (Id: {1})".format(cName, c['Id'])
             c = None
