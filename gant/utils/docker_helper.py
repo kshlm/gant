@@ -58,6 +58,8 @@ class DockerHelper (docker.Client):
         """
         if not name:
             return None
+
+        name = '/'+name # docker prepends a '/' to container names in the container dict
         return next((container for container in self.containers(all = True) if name in container['Names']), None)
 
     def container_exists (self, id = None, name = None):
