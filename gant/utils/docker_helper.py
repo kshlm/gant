@@ -44,6 +44,33 @@ class DockerHelper (docker.Client):
 
         return exists
 
+    def container_by_id (self, id):
+        """
+        Returns container with given id
+        """
+        if not id:
+            return None
+        return next((container for container in self.containers(all = True) if container['Id'] == id), None)
+
+    def container_by_name (self, name):
+        """
+        Returns container with given name
+        """
+        if not name:
+            return None
+        return next((container for container in self.containers(all = True) if name in container['Names']), None)
+    def container_exists (self, id = None, name = None):
+        """
+        Checks if container exists already
+        """
+        exists = False
+        if id and self.container_by_id (id):
+            exists = True
+        elif name and self.container_by_name (name):
+            exists = True
+
+        return exists
+
     def container_ip (self, container):
         """
         Returns the internal ip of the container if available
@@ -61,3 +88,4 @@ class DockerHelper (docker.Client):
             return None
 
         return ip
+
