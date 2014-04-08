@@ -23,7 +23,7 @@ class GantDocker (DockerHelper):
     def __init__ (self):
         super (GantDocker, self).__init__()
 
-    def build_base_image (self, args):
+    def build_base_image_cmd (self, args):
         """
         Build the glusterbase image
         """
@@ -43,7 +43,7 @@ class GantDocker (DockerHelper):
         image = self.build(path = basedir, rm = True, tag = basetag)
         print "Built base image {0} (Id: {1})".format()
 
-    def build_main_image (self, args):
+    def build_main_image_cmd (self, args):
         """
         Build the main image to be used for launching containers
         """
@@ -85,7 +85,7 @@ class GantDocker (DockerHelper):
         image = self.commit(container['Id'], repository = repo, tag = tag)
         print "Built main image {0} (Id: {1})".format(maintag, image['Id'])
 
-    def launch (self, args):
+    def launch_cmd (self, args):
         """
         Launch the specified docker containers using the main image
         """
@@ -120,7 +120,7 @@ class GantDocker (DockerHelper):
 
 
 
-    def stop (self, args):
+    def stop_cmd (self, args):
         """
         Stop the specified or all docker containers launched by us
         """
@@ -131,11 +131,11 @@ class GantDocker (DockerHelper):
         else:
             print "Would stop all containers"
 
-    def info (self, args):
+    def info_cmd (self, args):
         """
         Print information on the built up environment
         """
         print 'Would print info on the gluster env'
 
-    def ssh (self, args):
+    def ssh_cmd (self, args):
         print 'Would ssh into container %s'%(args['name'])

@@ -43,15 +43,15 @@ def main():
     g = GantDocker()
 
     if args["build-base"]:
-        g.build_base_image (args)
+        g.build_base_image_cmd(args)
     elif args["build-main"]:
-        g.build_main_image (args)
+        g.build_main_image_cmd(args)
     elif args["launch"]:
-        g.launch(args)
+        g.launch_cmd(args)
     elif args["stop"]:
-        g.stop(args)
+        g.stop_cmd(args)
     elif args["info"]:
-        g.info(args)
+        g.info_cmd(args)
     elif args["ssh"]:
-        g.ssh(args)
+        g.ssh_cmd(args)
 
