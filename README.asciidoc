@@ -1,0 +1,26 @@
+= *GAnt* - the Gluster development helper ant
+
+GAnt, is a tool for creating standardized development and testing environments for GlusterFS development. GAnt makes use of https://www.docker.io[Docker] to build the development environment.
+
+WARNING: +gant+ is still under heavy development and many not work as expected
+
+== Installation instructions
+. Install +docker+
+. Get the GlusterFS source
+. Install +gant+
+
+=== Install docker
+Install the latest version of docker using the preferred method of installation for your system
+
+=== Get the GlusterFS source
+Clone the GlusterFS source from http://review.gluster.org[Gluster gerrit] or from https://forge.gluster.org/glusterfs-core/glusterfs[GlusterForge] or from https://github.com/gluster/glusterfs[Github].
+The GlusterFS source is needed to build the docker images. This source will also contain some helper scripts and files needed by +gant+.
+
+NOTE: The helper scripts and files are not yet available in the GlusterFS source repo.
+
+=== Install +gant+
+Install +gant+ using +pip+,
+ $ pip install gant
+
+== Using +gant+
+TODO: Fill this section up
