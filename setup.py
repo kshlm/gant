@@ -2,19 +2,22 @@
 from setuptools import setup
 
 setup(name='gant',
-    version='0.0.1',
+    version='0.0.2',
     description="The Gluster development helper ant",
-    long_description="The Gluster development helper ant, gant for short, helps developer of GlusterFS by createing a standardized development and testing environment using Docker.",
+    long_description="The Gluster development helper ant, gant for short, helps in the development of GlusterFS by creating a standardized development and testing environment using Docker.",
     keywords='gluster docker utility development testing',
     author='Kaushal M',
     author_email='kshlmster@gmail.com',
-    url='http://github.com/kshlm/gant',
+    url='https://github.com/kshlm/gant',
     license='BSD',
     classifiers=[
-        "Development Status :: 3 - Pre-Alpha",
+        "Development Status :: 3 - Alpha",
         "Topic :: Utilities",
         "License :: OSI Approved :: BSD License",
         "Environment :: Console",
+        "Intended Audience :: Developers",
+        "Operating System :: POSIX :: Linux",
+        "Topic :: Utilities",
     ],
     packages=['gant'],
     install_requires=[
