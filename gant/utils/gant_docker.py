@@ -158,3 +158,16 @@ class GantDocker (DockerHelper):
             ssh.do_cmd('root', ip, 'password', string.join(ssh_command))
         else:
             ssh.launch_shell('root', ip, 'password')
+
+    def ip_cmd (self, args):
+        name = args["<name>"]
+
+        if not self.container_exists(name = name):
+            exit ('Unknown container {0}'.format(name))
+
+        ip = self.get_container_ip(name)
+        if not ip:
+            exit ("Failed to get network address for container {0}".formant(name))
+        else:
+            print ip
+

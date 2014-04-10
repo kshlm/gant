@@ -15,6 +15,7 @@ Usage:
     gant [options] stop [<name>] [force]
     gant [options] info
     gant [options] ssh <name> [<ssh-command>...]
+    gant [options] ip <name>
 
 Commands:
     build-base  Builds the base docker image
@@ -23,6 +24,7 @@ Commands:
     stop        Stops the launched containers
     info        Gives information about the gant environment
     ssh         SSHes into the named container and runs the command if given
+    ip          Gives IP address of the named container
 
 Arguments:
     force          Forcefully do the operation
@@ -40,7 +42,7 @@ Options:
 """.format(os.getcwd())
 
 def main():
-    args = docopt(helpStr, version = "Gant v0.0.1")
+    args = docopt(helpStr, version = "Gant v0.0.4")
     g = GantDocker()
 
     if args["build-base"]:
@@ -55,4 +57,6 @@ def main():
         g.info_cmd(args)
     elif args["ssh"]:
         g.ssh_cmd(args)
+    elif args["ip"]:
+        g.ip_cmd(args)
 
