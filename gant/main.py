@@ -14,7 +14,7 @@ Usage:
     gant [options] launch <number> [force]
     gant [options] stop [<name>] [force]
     gant [options] info
-    gant [options] ssh <name>
+    gant [options] ssh <name> [<ssh-command>...]
 
 Commands:
     build-base  Builds the base docker image
@@ -22,13 +22,14 @@ Commands:
     launch      Launches the given number of containers
     stop        Stops the launched containers
     info        Gives information about the gant environment
-    ssh         SSHes into the named container
+    ssh         SSHes into the named container and runs the command if given
 
 Arguments:
-    force     Forcefully do the operation
-    <srcdir>  Directory containing the GlusterFS source
-    <number>  Number of containers to launch
-    <name>    Name of container to stop
+    force          Forcefully do the operation
+    <srcdir>       Directory containing the GlusterFS source
+    <number>       Number of containers to launch
+    <name>         Name of container to stop
+    <ssh-command>  Command to run inside the container
 
 Options:
     -c <conffile>, --conf <conffile>  Configuration file to use

@@ -1,6 +1,7 @@
 import os
 import grp
 import time
+import string
 from docker_helper import DockerHelper
 import ssh
 
@@ -128,8 +129,8 @@ class GantDocker (DockerHelper):
         """
         check_permissions()
 
-        if args["name"]:
-            print "Would stop container %s"%(args["name"])
+        if args["<name>"]:
+            print "Would stop container %s"%(args["<name>"])
         else:
             print "Would stop all containers"
         print "For now use 'docker stop' to stop the containers"
@@ -142,6 +143,7 @@ class GantDocker (DockerHelper):
 
     def ssh_cmd (self, args):
         name = args["<name>"]
+        ssh_command = args["<ssh-command>"]
 
         if not self.container_exists(name = name):
             exit ("Unknown container {0}".format(name))
@@ -152,5 +154,7 @@ class GantDocker (DockerHelper):
         ip = self.get_container_ip(name)
         if not ip:
             exit ("Failed to get network address for container {0}".formant(name))
-
-        ssh.launch_shell('root', ip, 'password')
+        if ssh_command:
+            ssh.do_cmd('root', ip, 'password', string.join(ssh_command))
+        else:
+            ssh.launch_shell('root', ip, 'password')
