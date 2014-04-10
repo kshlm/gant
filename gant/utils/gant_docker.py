@@ -171,3 +171,20 @@ class GantDocker (DockerHelper):
         else:
             print ip
 
+    def gluster_cmd (self, args):
+        name = args["<name>"]
+        ssh_command = args["<gluster-command>"]
+
+        if not self.container_exists(name = name):
+            exit ("Unknown container {0}".format(name))
+
+        if not self.container_running(name = name):
+            exit ("Container {0} is not running".format(name))
+
+        ip = self.get_container_ip(name)
+        if not ip:
+            exit ("Failed to get network address for container {0}".formant(name))
+        if ssh_command:
+            ssh.do_cmd('root', ip, 'password', "gluster {0}".format(string.join(ssh_command)))
+        else:
+            ssh.do_cmd('root', ip, 'password', 'gluster')

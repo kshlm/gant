@@ -14,8 +14,9 @@ Usage:
     gant [options] launch <number> [force]
     gant [options] stop [<name>] [force]
     gant [options] info
-    gant [options] ssh <name> [<ssh-command>...]
+    gant [options] ssh <name> [--] [<ssh-command>...]
     gant [options] ip <name>
+    gant [options] gluster <name> [--] [<gluster-command>...]
 
 Commands:
     build-base  Builds the base docker image
@@ -25,6 +26,7 @@ Commands:
     info        Gives information about the gant environment
     ssh         SSHes into the named container and runs the command if given
     ip          Gives IP address of the named container
+    gluster     Runs given gluster CLI command in named container
 
 Arguments:
     force          Forcefully do the operation
@@ -59,4 +61,6 @@ def main():
         g.ssh_cmd(args)
     elif args["ip"]:
         g.ip_cmd(args)
+    elif args["gluster"]:
+        g.gluster_cmd(args)
 
