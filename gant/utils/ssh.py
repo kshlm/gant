@@ -1,7 +1,7 @@
 import os
 import tempfile
 
-sshCmdLine = 'sshpass -p {0} ssh -o UserKnownHostsFile={1} -o StrictHostKeyChecking=no {2}@{3} -p {4}'
+sshCmdLine = 'sshpass -p {0} ssh -q -o UserKnownHostsFile={1} -o StrictHostKeyChecking=no {2}@{3} -p {4}'
 
 def launch_shell (username, hostname, password, port = 22):
     """
