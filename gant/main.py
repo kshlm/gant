@@ -44,7 +44,7 @@ Options:
 """.format(os.getcwd())
 
 def main():
-    args = docopt(helpStr, version = "Gant v0.0.4")
+    args = docopt(helpStr, version = "Gant v0.0.5")
     g = GantDocker()
 
     if args["build-base"]:
