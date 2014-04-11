@@ -29,11 +29,12 @@ Commands:
     gluster     Runs given gluster CLI command in named container
 
 Arguments:
-    force          Forcefully do the operation
-    <srcdir>       Directory containing the GlusterFS source
-    <number>       Number of containers to launch
-    <name>         Name of container to stop
-    <ssh-command>  Command to run inside the container
+    force              Forcefully do the operation
+    <srcdir>           Directory containing the GlusterFS source
+    <number>           Number of containers to launch
+    <name>             Name of container to stop
+    <ssh-command>      Command to run inside the container
+    <gluster-command>  Gluster CLI command to run inside the container
 
 Options:
     -c <conffile>, --conf <conffile>  Configuration file to use

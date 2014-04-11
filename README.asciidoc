@@ -2,7 +2,7 @@
 
 GAnt, is a tool for creating standardized development and testing environments for GlusterFS development. GAnt makes use of https://www.docker.io[Docker] to build the development environment.
 
-WARNING: +gant+ is still under heavy development and many not work as expected
+WARNING: +gant+ is still under heavy development and may not work as expected.
 
 == Installation instructions
 . Install +docker+
@@ -16,12 +16,41 @@ Install the latest version of docker using the preferred method of installation 
 Clone the GlusterFS source from http://review.gluster.org[Gluster gerrit] or from https://forge.gluster.org/glusterfs-core/glusterfs[GlusterForge] or from https://github.com/gluster/glusterfs[Github].
 The GlusterFS source is needed to build the docker images. This source will also contain some helper scripts and files needed by +gant+.
 
-NOTE: The helper scripts and files are not yet available in the GlusterFS source repo.
+[NOTE]
+The helper scripts and files are not yet available in the GlusterFS source repo.
+The patch with these files is under review at http://review.gluster.org/7442[review.gluster.org].
+The files are also available on the branch https://forge.gluster.org/~kshlm/glusterfs-core/kshlms-glusterfs/trees/gant-files/extras/gant-files['gant-files'] in my https://forge.gluster.org/~kshlm/glusterfs-core/kshlms-glusterfs[GlusterFS clone] on https://forge.gluster.org[GlusterForge].
 
 === Install +gant+
 Install +gant+ using +pip+,
- 
+
  $ pip install gant
 
 == Using +gant+
-TODO: Fill this section up
+
++gant+ needs to be run in the 'extras/gant-files' directory. This will be changed in the future when conf file support is implemented.
+
+. +gant build-base+ - build the base image
+. +gant build-main+ - build main image with GlusterFS installed from source
+. +gant launch+ - launch the containers
+. +gant ssh+ - run ssh commands in the containers
+. +gant ip+ - print IP address of container
+. +gant gluster+ - run gluster cli command in container
+
+=== +gant build-base [force]+
+The +build-base+ command builds the base Docker image. This base image will be used to build the main image and to build packages (when support for building packages is implemented). The base image is named 'glusterbase:latest' by default, which can be changed using the +--basetag+ option. The base image is build using the 'Dockerfile' present in 'gant-files'.
+
+=== +gant build-main <srcdir> [force]+
+The +build-main+ image builds the main Docker image with GlusterFS installed, which will be used to launch the containers. The main image will be named 'gluster:latest' by default, which can be changed using the +--maintag+ option. The 'make-install-gluster.sh' script in  'gant-files' is used to build and install GlusterFS from source present in +<srcdir>+.
+
+=== +gant launch <number>+
+The +launch+ command launches the given +<number>+ of containers. The containers are name 'gluster-*' by default, which can be changed using the +--prefix+ option. The containers are launched with +sshd+ running.
+
+=== +gant ssh <name> [--] [<ssh-command>...]+
+The +ssh+ command will ssh into the +<name>+d container. It will run any +<ssh-command>+ given or launch a shell otherwise.
+
+=== +gant ip <name>+
+The +ip+ command prints the IP address of the +<name>+d conatiner.
+
+=== +gant gluster <name> [--] <gluster-command>...+
+The +gluster+ command will run the given +<gluster-command>+ in the +<name>+d container.

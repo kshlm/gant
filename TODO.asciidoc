@@ -1,0 +1,7 @@
+= Stuff to do in GAnt
+
+* Store running config, environment details etc. This needed for the below todos
+**  Implement the 'gant stop' command
+**  Implement the 'gant info' command
+* Use docker volumes for the GlusterFS brick and log directories. This will allow developers to directly access logs and files on the container.
+* Add support for configuration file.
