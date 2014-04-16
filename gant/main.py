@@ -1,4 +1,4 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python
 
 from docopt import docopt
 from .utils.gant_docker import GantDocker

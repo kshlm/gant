@@ -2,8 +2,8 @@ import os
 import grp
 import time
 import string
-from docker_helper import DockerHelper
-import ssh
+from .docker_helper import DockerHelper
+from . import ssh
 
 def check_permissions():
     """
@@ -36,13 +36,13 @@ class GantDocker (DockerHelper):
 
         if self.image_exists(tag = basetag):
             if not force:
-                print "Image with tag '%s' already exists"%(basetag)
+                print("Image with tag '%s' already exists"%(basetag))
                 return  self.image_by_tag (basetag)
             else:
                 self.remove_image (basetag)
-        print "Building base image"
+        print("Building base image")
         image = self.build(path = basedir, rm = True, tag = basetag)
-        print "Built base image {0} (Id: {1})".format()
+        print("Built base image {0} (Id: {1})".format())
 
     def build_main_image_cmd (self, args):
         """
@@ -60,7 +60,7 @@ class GantDocker (DockerHelper):
             if not force:
                 exit ("Base image with tag {0} does not exist".format(basetag))
             else:
-                print "FORCE given. Forcefully building the base image."
+                print("FORCE given. Forcefully building the base image.")
                 self.build_base_image(args)
 
         if self.image_exists(tag = maintag):
@@ -70,21 +70,21 @@ class GantDocker (DockerHelper):
         container = self.create_container(image = basetag, command = build_command, volumes = ["/build", "/src"])
 
         self.start (container, binds = {basedir : "/build", srcdir : "/src"})
-        print 'Building main image'
+        print('Building main image')
         while self.inspect_container(container)["State"]["Running"]:
             time.sleep(5)
 
         if not self.inspect_container(container)["State"]["ExitCode"] == 0:
-            print "Build failed"
-            print "Dumping logs"
-            print self.logs(container)
+            print("Build failed")
+            print("Dumping logs")
+            print(self.logs(container))
             exit()
 
         # The docker remote api expects the repository and tag to be seperate items for commit
         repo = maintag.split(':')[0]
         tag = maintag.split(':')[1]
         image = self.commit(container['Id'], repository = repo, tag = tag)
-        print "Built main image {0} (Id: {1})".format(maintag, image['Id'])
+        print("Built main image {0} (Id: {1})".format(maintag, image['Id']))
 
     def launch_cmd (self, args):
         """
@@ -117,7 +117,7 @@ class GantDocker (DockerHelper):
 
             ssh.do_cmd('root', self.get_container_ip(c['Id']), 'password', createDevFuse)
 
-            print "Launched {0} (Id: {1})".format(cName, c['Id'])
+            print("Launched {0} (Id: {1})".format(cName, c['Id']))
             c = None
             cName = None
 
@@ -130,16 +130,16 @@ class GantDocker (DockerHelper):
         check_permissions()
 
         if args["<name>"]:
-            print "Would stop container %s"%(args["<name>"])
+            print("Would stop container %s"%(args["<name>"]))
         else:
-            print "Would stop all containers"
-        print "For now use 'docker stop' to stop the containers"
+            print("Would stop all containers")
+        print("For now use 'docker stop' to stop the containers")
 
     def info_cmd (self, args):
         """
         Print information on the built up environment
         """
-        print 'Would print info on the gluster env'
+        print('Would print info on the gluster env')
 
     def ssh_cmd (self, args):
         name = args["<name>"]
@@ -155,7 +155,7 @@ class GantDocker (DockerHelper):
         if not ip:
             exit ("Failed to get network address for container {0}".formant(name))
         if ssh_command:
-            ssh.do_cmd('root', ip, 'password', string.join(ssh_command))
+            ssh.do_cmd('root', ip, 'password', " ".join(ssh_command))
         else:
             ssh.launch_shell('root', ip, 'password')
 
@@ -169,7 +169,7 @@ class GantDocker (DockerHelper):
         if not ip:
             exit ("Failed to get network address for container {0}".formant(name))
         else:
-            print ip
+            print(ip)
 
     def gluster_cmd (self, args):
         name = args["<name>"]
@@ -185,6 +185,6 @@ class GantDocker (DockerHelper):
         if not ip:
             exit ("Failed to get network address for container {0}".formant(name))
         if ssh_command:
-            ssh.do_cmd('root', ip, 'password', "gluster {0}".format(string.join(ssh_command)))
+            ssh.do_cmd('root', ip, 'password', "gluster {0}".format(" ".join(ssh_command)))
         else:
             ssh.do_cmd('root', ip, 'password', 'gluster')
