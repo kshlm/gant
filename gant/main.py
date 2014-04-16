@@ -20,7 +20,8 @@ Usage:
 
 Commands:
     build-base  Builds the base docker image
-    build-main  Builds the main docker image to be used for launching containers
+    build-main  Builds the main docker image to be used for launching
+                containers
     launch      Launches the given number of containers
     stop        Stops the launched containers
     info        Gives information about the gant environment
@@ -38,14 +39,21 @@ Arguments:
 
 Options:
     -c <conffile>, --conf <conffile>  Configuration file to use
-    --basetag <basetag>               Tag to be used for the base docker image [default: glusterbase:latest]
-    --maintag <maintag>               Tag to be used for the main docker image [default: gluster:latest]
-    --basedir <basedir>               Base directory containing the Dockerfile and helper scripts for Gant [default: {0}]
-    --prefix <prefix>                 Prefix to be used for naming the launched docker containers [default: gluster]
+    --basetag <basetag>               Tag to be used for the base docker image
+                                      [default: glusterbase:latest]
+    --maintag <maintag>               Tag to be used for the main docker image
+                                      [default: gluster:latest]
+    --basedir <basedir>               Base directory containing the Dockerfile
+                                      and helper scripts for Gant
+                                      [default: {0}]
+    --prefix <prefix>                 Prefix to be used for naming the
+                                      launched docker containers
+                                      [default: gluster]
 """.format(os.getcwd())
 
+
 def main():
-    args = docopt(helpStr, version = "Gant v0.0.5")
+    args = docopt(helpStr, version="Gant v0.0.5")
     g = GantDocker()
 
     if args["build-base"]:
@@ -64,4 +72,3 @@ def main():
         g.ip_cmd(args)
     elif args["gluster"]:
         g.gluster_cmd(args)
-
