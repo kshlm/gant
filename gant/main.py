@@ -53,7 +53,7 @@ Options:
 
 
 def main():
-    args = docopt(helpStr, version="Gant v0.0.6")
+    args = docopt(helpStr, version="Gant v0.0.7")
     g = GantDocker()
 
     if args["build-base"]:

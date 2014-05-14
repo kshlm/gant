@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='gant',
-    version='0.0.6',
+    version='0.0.7',
     description="The Gluster development helper ant",
     long_description="The Gluster development helper ant, gant for short, helps in the development of GlusterFS by creating a standardized development and testing environment using Docker.",
     keywords='gluster docker utility development testing',
