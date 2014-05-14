@@ -1,6 +1,8 @@
 import os
 import grp
 import time
+import json
+
 from .docker_helper import DockerHelper
 from . import ssh
 
@@ -29,6 +31,13 @@ class GantDocker (DockerHelper):
     def __init__(self):
         super(GantDocker, self).__init__()
 
+    def __handle_build_stream(self, stream):
+        for line in stream:
+            d = json.loads(line)
+            if "error" in d:
+                return d["error"].strip()
+        return None
+
     def build_base_image_cmd(self, args):
         """
         Build the glusterbase image
@@ -46,8 +55,16 @@ class GantDocker (DockerHelper):
             else:
                 self.remove_image(basetag)
         print("Building base image")
-        image = self.build(path=basedir, rm=True, tag=basetag)
-        print("Built base image {0} (Id: {1})".format(image['Id']))
+        stream = self.build(path=basedir, rm=True, tag=basetag)
+        err = self.__handle_build_stream(stream)
+        if err:
+            print("Building base image failed with following error:")
+            print(err)
+            return None
+
+        image = self.image_by_tag(basetag)
+        print("Built base image {0} (Id: {1})".format(basetag, image['Id']))
+        return image
 
     def build_main_image_cmd(self, args):
         """
