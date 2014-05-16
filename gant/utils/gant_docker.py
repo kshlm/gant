@@ -31,11 +31,13 @@ class GantDocker (DockerHelper):
     def __init__(self):
         super(GantDocker, self).__init__()
 
-    def __handle_build_stream(self, stream):
+    def __handle_build_stream(self, stream, verbose):
         for line in stream:
             d = json.loads(line)
             if "error" in d:
                 return d["error"].strip()
+            elif verbose:
+                print(d["stream"].strip())
         return None
 
     def build_base_image_cmd(self, args):
@@ -47,6 +49,7 @@ class GantDocker (DockerHelper):
         basetag = args["--basetag"]
         basedir = args["--basedir"]
         force = args["force"]
+        verbose = args["--verbose"]
 
         if self.image_exists(tag=basetag):
             if not force:
@@ -56,7 +59,7 @@ class GantDocker (DockerHelper):
                 self.remove_image(basetag)
         print("Building base image")
         stream = self.build(path=basedir, rm=True, tag=basetag)
-        err = self.__handle_build_stream(stream)
+        err = self.__handle_build_stream(stream, verbose)
         if err:
             print("Building base image failed with following error:")
             print(err)

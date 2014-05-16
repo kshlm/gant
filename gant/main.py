@@ -49,6 +49,7 @@ Options:
     --prefix <prefix>                 Prefix to be used for naming the
                                       launched docker containers
                                       [default: gluster]
+    -V, --verbose                     Verbose output
 """.format(os.getcwd())
 
 
