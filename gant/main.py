@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+from __future__ import unicode_literals, print_function
+
 from .utils.gant_docker import GantDocker
 import os
 import click

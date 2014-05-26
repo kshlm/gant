@@ -1,5 +1,7 @@
 # Helper functions for docker
 
+from __future__ import unicode_literals, print_function
+
 import docker
 import os
 
