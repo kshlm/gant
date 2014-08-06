@@ -2,7 +2,8 @@
 
 from __future__ import unicode_literals, print_function
 
-from .utils.gant_docker import GantDocker
+from .utils.gant_ctx import GantCtx
+
 import os
 import click
 
@@ -70,19 +71,22 @@ Options:
               help="Prefix used for naming launched containers")
 @click.option("--verbose", "-v", count=True, metavar="",
               help="Increase verbosity of output")
-def gant(conf, basedir, basetag, maintag, prefix, verbose):
+@click.pass_context
+def gant(ctx, conf, basedir, basetag, maintag, prefix, verbose):
     """
     GAnt : The Gluster helper ant\n
     Creates GlusterFS development and testing environments using Docker
     """
-    pass
+    ctx.obj.initConf(basetag, maintag, basedir, prefix, verbose)
+    ctx.obj.gd.setConf(ctx.obj.conf)
 
 
 @gant.command(name="build-base", help="Build the base docker image")
 @click.option("--force", is_flag=True, default=False,
               help="Forcefully do the operation")
-def build_base(force):
-    click.echo(force)
+@click.pass_context
+def build_base(ctx, force):
+    ctx.obj.gd.build_base_image_cmd(force)
 
 
 @gant.command(name="build-main",
@@ -91,50 +95,56 @@ def build_base(force):
               help="Forcefully do the operation")
 @click.argument("srcdir",
                 type=click.Path(exists=True, file_okay=False, readable=True))
-def build_main():
-    pass
+@click.pass_context
+def build_main(ctx, srcdir, force):
+    ctx.obj.gd.build_main_image_cmd(srcdir, force)
 
 
 @gant.command(help="Launch the given number of containers")
 @click.option("--force", is_flag=True, default=False,
               help="Forcefully do the operation")
 @click.argument("number", type=click.INT)
-def launch():
-    pass
+@click.pass_context
+def launch(ctx, number, force):
+    ctx.obj.gd.launch_cmd(number, force)
 
 
 @gant.command(help="Stop the launched containers")
 @click.option("--force", is_flag=True, default=False,
               help="Forcefully do the operation")
 @click.argument("name", required=False, type=click.STRING)
-def stop():
-    pass
+@click.pass_context
+def stop(ctx, name, force):
+    ctx.obj.gd.stop_cmd(name, force)
 
 
 @gant.command(help="Show information about the GAnt environment")
-def info():
-    pass
+@click.pass_context
+def info(ctx):
+    ctx.obj.gd.info_cmd()
 
 
 @gant.command(help="Print ip of given container")
 @click.argument("container", type=click.STRING)
-def ip():
-    pass
+@click.pass_context
+def ip(ctx, container):
+    ctx.obj.gd.ip_cmd(container)
 
 
 @gant.command(help="SSHes into named container and runs command if given")
 @click.argument("container", type=click.STRING)
 @click.argument("command", required=False, type=click.STRING, nargs=-1)
-def ssh(container, command):
-    click.echo(command)
+@click.pass_context
+def ssh(ctx, container, command):
+    ctx.obj.gd.ssh_cmd(container, command)
 
 
 @gant.command(help="Runs given gluster command in named container")
 @click.argument("container", type=click.STRING)
 @click.argument("command", type=click.STRING, nargs=-1)
-def gluster():
-    pass
+def gluster(ctx, container, command):
+    ctx.obj.gd.gluster_cmd(container, command)
 
 
 def main():
-    gant()
+    gant(obj=GantCtx())
