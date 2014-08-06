@@ -71,6 +71,7 @@ Options:
               help="Prefix used for naming launched containers")
 @click.option("--verbose", "-v", count=True, metavar="",
               help="Increase verbosity of output")
+@click.version_option(prog_name='GAnt')
 @click.pass_context
 def gant(ctx, conf, basedir, basetag, maintag, prefix, verbose):
     """
