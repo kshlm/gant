@@ -127,7 +127,6 @@ class GantDocker (DockerHelper):
         maintag = self.conf.maintag
 
         commandStr = "supervisord -c /etc/supervisor/conf.d/supervisord.conf"
-        createDevFuse = "mknod /dev/fuse c 10 229"
 
         for i in range(1, n+1):
             cName = "{0}-{1}".format(prefix, i)
@@ -145,9 +144,6 @@ class GantDocker (DockerHelper):
                                       command=commandStr, volumes=["/bricks"])
             self.start(c['Id'], privileged=True)
             time.sleep(2)  # Wait for container to startup
-
-            ssh.do_cmd('root', self.get_container_ip(c['Id']), 'password',
-                       createDevFuse)
 
             echo("Launched {0} (Id: {1})".format(cName, c['Id']))
             c = None
